@@ -100,7 +100,8 @@ int main() {
             if (*endptr == '\0' || *endptr == '\n') {
                 // Если число было успешно преобразовано
                 printf("timer has been set for %ldms\n", time_ms);
-            } else {
+            } 
+            else {
                 // Если строка не является числом
                 printf("not a number\n");
             }
