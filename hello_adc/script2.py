@@ -1,46 +1,49 @@
 import serial
 import time
-import csv
-import time
 import matplotlib.pyplot as plt
 
-filename = "D:\\rp-pico-projects\\hello_adc\\sample.csv"
-ser = serial.Serial('COM3', 115200, timeout=1) 
-
-def send_command(command):
-    ser.write((command + '\n').encode('utf-8')) 
-def read_response():
-    response = ser.readline().decode('utf-8').strip() 
-    return response
-
-print("input sampling duration(s): ")
-timer = int(input())
-for i in range(timer, 0, -1):
-    send_command("sample")
-    time.sleep(1)
-
-    response = read_response()
-    if response:
-        with open(filename, "a") as file:
-            file.write(response + "\n")
-        file.close()
-
-numbers = []
-with open(filename, mode="r", encoding="utf-8") as file:
-    reader = csv.reader(file)
-    for row in reader:
-        try:
-            numbers.append(float(row[0]))  # Преобразуем строку в число
-        except ValueError:
-            print(f"Ошибка в строке: {row}")
-            
-plt.figure(figsize=(8, 5))
-plt.plot(numbers, marker="o", linestyle="-", color="b", label="Данные из CSV")
+def record_data(port, baudrate, duration, filename):
+    ser = serial.Serial(port, baudrate, timeout=1)
     
-plt.xlabel("Номер измерения")
-plt.ylabel("Значение")
-plt.title("График данных из CSV")
-plt.legend()
-plt.grid(True)
+    with open(filename, 'wb') as f:
+        start_time = time.time()
+        print(f"Начало записи в {filename} на {duration} секунд...")
+        
+        data_list = []
+        timestamps = []
+        
+        while time.time() - start_time < duration:
+            data = ser.readline()
+            if data:
+                f.write(data)
+                f.flush()
+                decoded_data = data.decode('utf-8', errors='ignore').strip()
+                print(decoded_data)
+                
+                try:
+                    value = float(decoded_data)
+                    data_list.append(value)
+                    timestamps.append(time.time() - start_time)
+                except ValueError:
+                    pass
     
-plt.show()
+    ser.close()
+    print("Запись завершена.")
+    plot_data(timestamps, data_list)
+
+def plot_data(timestamps, data_list):
+    plt.figure(figsize=(10, 5))
+    plt.plot(timestamps, data_list, linestyle='-')
+    plt.xlabel('Время (секунды)')
+    plt.ylabel('Значение')
+    plt.title('График полученных данных')
+    plt.grid(True, linestyle='--', linewidth=0.5)
+    plt.show()
+
+if __name__ == "__main__":
+    port = input("Введите порт (например, COM3 или /dev/ttyUSB0): ")
+    baudrate = int(input("Введите скорость (например, 9600): "))
+    duration = int(input("Введите время записи (в секундах): "))
+    filename = input("Введите имя файла для сохранения данных: ")
+    
+    record_data(port, baudrate, duration, filename)

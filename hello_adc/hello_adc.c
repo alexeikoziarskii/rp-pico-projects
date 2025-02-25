@@ -16,18 +16,6 @@
 
 
  //чтение строки из uart
-void read_uart_string(char *buffer, size_t max_length) {
-    size_t index = 0;
-    while (index < max_length - 1) {
-        char ch = getchar();  // Читаем символ
-        if (ch == '\r' || ch == '\n') {  // Конец строки (Enter)
-            buffer[index] = '\0';  // Завершаем строку
-            return;
-        }
-        buffer[index++] = ch;  // Добавляем в буфер
-    }
-    buffer[max_length - 1] = '\0';  // Защита от переполнения
-}
 
 int main() {
     stdio_init_all();
@@ -42,15 +30,12 @@ int main() {
  
     char command[MAX_CMD_LENGTH];  // Буфер для команды
     char time[MAX_TIMER_LENGTH];   // Буфер для таймера
+    const float conversion_factor = 3.3f / (1 << 12);
 
     while(true){
-        read_uart_string(command, MAX_CMD_LENGTH);
-        if(strcmp(command, "sample") == 0){
-            const float conversion_factor = 3.3f / (1 << 12);
-            uint16_t result = adc_read();
-            sleep_ms(500);
-            printf("%f\n", result * conversion_factor);
-        }
+        uint16_t result = adc_read();
+        sleep_ms(2);
+        printf("%f\n", result * conversion_factor);
     }   
 }
  
