@@ -38,11 +38,14 @@ def plot_data(timestamps, data_list):
     plt.ylabel('Значение')
     plt.title('График полученных данных')
     plt.grid(True, linestyle='--', linewidth=0.5)
+
+    plt.savefig("D:\\rp-pico-projects\\hello_adc\\capacitor charge-discharge demo.png")
+
     plt.show()
 
 if __name__ == "__main__":
-    port = input("Введите порт (например, COM3 или /dev/ttyUSB0): ")
-    baudrate = int(input("Введите скорость (например, 9600): "))
+    port = "COM4" #input("Введите порт (например, COM3 или /dev/ttyUSB0): ")
+    baudrate = 115200 #int(input("Введите скорость (например, 9600): "))
     duration = int(input("Введите время записи (в секундах): "))
     filename = input("Введите имя файла для сохранения данных: ")
     
