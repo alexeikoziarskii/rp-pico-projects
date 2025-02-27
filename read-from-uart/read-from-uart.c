@@ -115,7 +115,7 @@ int main() {
             printf("LED OFF\n");
 
         } 
-
+        
         else if (strcmp(command, "readmem") == 0) {  // Если команда "readmem"
             printf("Enter memory address to read (in hex):\n");
             read_uart_string(addr_str, MAX_ADDR_LENGTH);  // Читаем строку с адресом
