@@ -2,7 +2,7 @@
 #include "pico/stdlib.h"
 #include "hardware/spi.h"
 #include "ili9341/ili9341.h"
-#include "gradient/gradient.h"
+#include "ant-lab/ant-lab.h"
 #include "stdlib.h"
 
 #define COLOR_COUNT 4 
@@ -20,19 +20,12 @@ int main()
     init_display();
     init_drawing();
 
+    //clear_buffer();
+    //display_external_buffer(get_antlab_image_buffer());
 
-    const uint16_t colors[] = {
-        0xF800,  // Красный
-        0x07E0,  // Зеленый
-        0x001F,  // Синий
-        0xFFFF   // Белый
-    };
-    
-
-    while (true) {
+    /*while (true) {
         clear_buffer();
-        handle_gradient(colors, COLOR_COUNT, get_buffer());
+        handle_gradient(get_buffer());
         display_buffer();
-        // display_external_buffer(get_antlab_image_buffer());
-    }
+    }*/
 }

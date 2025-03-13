@@ -57,11 +57,11 @@ target_include_directories(hello_ili9341 PRIVATE
 target_link_libraries(hello_ili9341 
         hardware_spi
         ili9341
-        gradient
+        ant-lab
         )
 
 pico_add_extra_outputs(hello_ili9341)
 add_subdirectory("${PROJECT_SOURCE_DIR}/ili9341" "${PROJECT_BINARY_DIR}/ili9341")
-add_subdirectory("${PROJECT_SOURCE_DIR}/gradient" "${PROJECT_BINARY_DIR}/gradient")
+add_subdirectory("${PROJECT_SOURCE_DIR}/ant-lab" "${PROJECT_BINARY_DIR}/ant-lab")
 
 
